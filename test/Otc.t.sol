@@ -51,7 +51,11 @@ contract HelloWorld_test is Test {
         address tokenAddr = address(0x123);
         uint256 quotePrice = 1000;
         uint256 quoteSize = 42;
-        otcContract.postQuote(tokenAddr, quoteSize, quotePrice);
+        uint256 quoteId = otcContract.postQuote(
+            tokenAddr,
+            quoteSize,
+            quotePrice
+        );
         (
             address token,
             uint256 amount,
@@ -63,6 +67,7 @@ contract HelloWorld_test is Test {
         assertEq(amount, 42);
         assertEq(price, 1000);
         assertEq(accepted, false);
+        assertEq(quoteId, 1);
     }
 
     function testNonOwnerCannotPostQuote() public {

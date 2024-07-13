@@ -88,10 +88,11 @@ contract Otc is Ownable {
         address _token,
         uint256 _size,
         uint256 _price
-    ) external onlyOwner {
+    ) external onlyOwner returns (uint256) {
         quotes.push(
             Quote({token: _token, size: _size, price: _price, accepted: false})
         );
+        return quotes.length;
     }
 
     /// Retrieve a list of available quotes
@@ -99,4 +100,24 @@ contract Otc is Ownable {
         // TODO: filter expired
         return quotes;
     }
+
+    // function acceptQuote(uint256 _quoteId) external payable {
+    //     Quote storage quote = quotes[_quoteId];
+    //     require(!quote.accepted, "Quote already accepted");
+    //     require(
+    //         msg.value == quote.amount * quote.price,
+    //         "Incorrect ETH amount"
+    //     );
+    //
+    //     quote.accepted = true;
+    //
+    //     // Transfer tokens from seller to buyer
+    //     IERC20(quote.token).transferFrom(
+    //         quote.seller,
+    //         msg.sender,
+    //         quote.amount
+    //     );
+    //     // Transfer ETH from contract to seller
+    //     payable(quote.seller).transfer(msg.value);
+    // }
 }
