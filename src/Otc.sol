@@ -11,8 +11,6 @@ type Exposure is uint256;
 type Price is uint256;
 
 contract Otc is Ownable, FlowOtc {
-    string public greeting = "Hello World";
-
     enum QuoteSide {
         Buy,
         Sell
@@ -32,7 +30,7 @@ contract Otc is Ownable, FlowOtc {
     ERC20[] public tokens;
     Quote[] public quotes;
 
-    // wallet => token => balance
+    // wallet => token => balance // IN USD_Stable
     mapping(address => Exposure) public exposure;
 
     modifier onlyWhitelistedWithPositiveCollateral() {
@@ -63,10 +61,7 @@ contract Otc is Ownable, FlowOtc {
     /// Charge an address a certain amount of tokens (decrease exposure)
     /// @param _address address to whitelist
     /// @param _amount size to remove from exposure
-    function _charge_address(
-        address _address,
-        uint256 _amount
-    ) external onlyOwner {
+    function _charge_address(address _address, uint256 _amount) internal {
         Exposure prevExpo = exposure[_address];
         // TODO: add test
         require(
@@ -120,5 +115,7 @@ contract Otc is Ownable, FlowOtc {
         quote.accepted = true;
         // MINT position
         safeMint(msg.sender);
+
+        _charge_address(msg.sender, quote.size);
     }
 }
