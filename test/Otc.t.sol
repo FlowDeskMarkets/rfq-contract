@@ -51,7 +51,7 @@ contract HelloWorld_test is Test {
         address tokenAddr = address(0x123);
         uint256 quotePrice = 1000;
         uint256 quoteSize = 42;
-        otcContract.createQuote(tokenAddr, quoteSize, quotePrice);
+        otcContract.postQuote(tokenAddr, quoteSize, quotePrice);
         (
             address token,
             uint256 amount,
@@ -72,7 +72,7 @@ contract HelloWorld_test is Test {
 
         vm.prank(addr2);
         vm.expectRevert();
-        otcContract.createQuote(tokenAddr, 100, 50);
+        otcContract.postQuote(tokenAddr, 100, 50);
     }
 
     // ---------------------- listQuotes ----------------------
@@ -80,7 +80,7 @@ contract HelloWorld_test is Test {
         Otc otcContract = new Otc();
 
         address tokenAddr = address(0x123);
-        otcContract.createQuote(tokenAddr, 100, 50);
+        otcContract.postQuote(tokenAddr, 100, 50);
         Otc.Quote[] memory quotes = otcContract.listQuotes();
 
         assertEq(quotes[0].token, tokenAddr);

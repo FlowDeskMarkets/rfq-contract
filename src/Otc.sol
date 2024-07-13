@@ -46,6 +46,10 @@ contract Otc is Ownable {
     // update balance for address DONE
     // delete address from whitelisting
 
+    /// Update or create exposure for a given address (whitelist address)
+    /// @param _address address to whitelist
+    /// @param _token token
+    /// @param _exposure exposure value
     function whitelistAddress(
         address _address,
         address _token,
@@ -54,25 +58,33 @@ contract Otc is Ownable {
         exposure[_address][_token] = _exposure;
     }
 
+    /// Charge an address a certain amount of tokens (decrease exposure)
+    /// @param _address address to whitelist
+    /// @param _token token
+    /// @param _amount size to remove from exposure
     function _charge_address(
         address _address,
         address _token,
-        uint256 amount
+        uint256 _amount
     ) external onlyOwner {
         Exposure prevExpo = exposure[_address][_token];
         // TODO: add test
         require(
-            Exposure.unwrap(prevExpo) >= amount,
+            Exposure.unwrap(prevExpo) >= _amount,
             "amount is larger than allowed exposure"
         );
         exposure[_address][_token] = Exposure.wrap(
-            Exposure.unwrap(prevExpo) - amount
+            Exposure.unwrap(prevExpo) - _amount
         );
     }
 
-    // QUOTE operations
-    // create quote, restricted to contract owner
-    function createQuote(
+    /////////////////////////////////////// QUOTE operations
+
+    /// create quote, restricted to contract owner
+    /// @param _token token address
+    /// @param _size quote size
+    /// @param _price quote price
+    function postQuote(
         address _token,
         uint256 _size,
         uint256 _price
@@ -82,8 +94,9 @@ contract Otc is Ownable {
         );
     }
 
-    // List quotes
+    /// Retrieve a list of available quotes
     function listQuotes() public view returns (Quote[] memory) {
+        // TODO: filter expired
         return quotes;
     }
 }
