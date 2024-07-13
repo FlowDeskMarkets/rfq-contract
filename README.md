@@ -4,10 +4,10 @@
 
 Foundry consists of:
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
+- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
+- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
+- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
 
 ## Documentation
 
@@ -63,4 +63,40 @@ $ cast <subcommand>
 $ forge --help
 $ anvil --help
 $ cast --help
+```
+
+## Test transactions
+
+```
+export PRIVATE_KEY="private_key"
+export CONTRACT_ADDRESS="private_key"
+```
+
+### Create quote
+
+```
+cast send \
+--private-key $PRIVATE_KEY \
+--rpc-url https://rpc.sepolia.org  \
+$CONTRACT_ADDRESS "postQuote(address token, uint256 size, uint256 price)" \
+0xD0684a311F47AD7fdFf03951d7b91996Be9326E1 1 50000000
+```
+
+### List quotes
+
+```
+cast send \
+--private-key $PRIVATE_KEY \
+--rpc-url https://rpc.sepolia.org  \
+$CONTRACT_ADDRESS "listQuotes()" \
+```
+
+### Accept quote
+
+```
+cast send \
+--private-key $PRIVATE_KEY \
+--rpc-url https://rpc.sepolia.org  \
+$CONTRACT_ADDRESS "acceptQuote(uint256 quoteId)" \
+0
 ```
