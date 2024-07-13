@@ -8,19 +8,11 @@ contract HelloWorld_test is Test {
     function test_whitelistAddress() public {
         Otc helloWorldContract = new Otc();
         address wallet_addr = address(0x123);
-        address token_addr = address(0x456);
         Exposure exposureValue = Exposure.wrap(1000);
 
-        helloWorldContract.whitelistAddress(
-            wallet_addr,
-            token_addr,
-            exposureValue
-        );
+        helloWorldContract.whitelistAddress(wallet_addr, exposureValue);
 
-        Exposure storedExposure = helloWorldContract.exposure(
-            wallet_addr,
-            token_addr
-        );
+        Exposure storedExposure = helloWorldContract.exposure(wallet_addr);
 
         assertEq(
             Exposure.unwrap(storedExposure),
@@ -33,15 +25,10 @@ contract HelloWorld_test is Test {
 
         Exposure exposureValue = Exposure.wrap(1000);
         address wallet_addr = address(0x123);
-        address token_addr = address(0x456);
 
         vm.prank(wallet_addr);
         vm.expectRevert();
-        helloWorldContract.whitelistAddress(
-            wallet_addr,
-            token_addr,
-            exposureValue
-        );
+        helloWorldContract.whitelistAddress(wallet_addr, exposureValue);
     }
 
     // ---------------------- createQuote ----------------------
@@ -88,7 +75,13 @@ contract HelloWorld_test is Test {
         Otc otcContract = new Otc();
 
         address tokenAddr = address(0x123);
+        address sender = address(0x456);
+        otcContract.whitelistAddress(sender, Exposure.wrap(1000));
+
         otcContract.postQuote(tokenAddr, Otc.QuoteSide.Sell, 100, 50);
+
+        vm.prank(sender);
+        // WHEN
         Otc.Quote[] memory quotes = otcContract.listQuotes();
 
         assertEq(quotes[0].token, tokenAddr);
@@ -96,5 +89,16 @@ contract HelloWorld_test is Test {
         assertEq(quotes[0].size, 100);
         assertEq(quotes[0].price, 50);
         assertEq(quotes[0].accepted, false);
+    }
+
+    function testListQuotesForNoneWhitelistedUsers() public {
+        Otc otcContract = new Otc();
+
+        address tokenAddr = address(0x123);
+
+        otcContract.postQuote(tokenAddr, Otc.QuoteSide.Sell, 100, 50);
+
+        vm.expectRevert("Not whitelisted or collateral is 0");
+        otcContract.listQuotes();
     }
 }
