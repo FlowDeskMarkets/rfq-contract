@@ -82,6 +82,17 @@ $CONTRACT_ADDRESS "postQuote(address token, uint8 side, uint256 size, uint256 pr
 0xD0684a311F47AD7fdFf03951d7b91996Be9326E1 0 1 50000000
 ```
 
+### Whitelist address
+
+```
+cast send \
+--private-key $PRIVATE_KEY \
+--rpc-url https://rpc.sepolia.org  \
+$CONTRACT_ADDRESS "whitelistAddress(address address, uint256 exposure)" \
+0xe3474c5Ccf3E882b442f2B46c43F1ae3c17F3887 10000
+
+```
+
 ### List quotes
 
 ```
