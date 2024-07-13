@@ -2,14 +2,17 @@
 pragma solidity ^0.8.19;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+
+import "./FlowOtc.sol";
 
 // TODO: add rbac / ownership
 
 type Exposure is uint256;
 type Price is uint256;
 
-contract Otc is Ownable {
+contract Otc is Ownable, FlowOtc {
     string public greeting = "Hello World";
 
     enum side {
@@ -24,6 +27,8 @@ contract Otc is Ownable {
         bool accepted;
         // TODO: add expiration
     }
+
+    ERC721 private nftContract;
 
     ERC20[] public tokens;
     Quote[] public quotes;
@@ -98,26 +103,17 @@ contract Otc is Ownable {
     /// Retrieve a list of available quotes
     function listQuotes() public view returns (Quote[] memory) {
         // TODO: filter expired
+        // restrict to only whitelisted
         return quotes;
     }
 
-    // function acceptQuote(uint256 _quoteId) external payable {
-    //     Quote storage quote = quotes[_quoteId];
-    //     require(!quote.accepted, "Quote already accepted");
-    //     require(
-    //         msg.value == quote.amount * quote.price,
-    //         "Incorrect ETH amount"
-    //     );
-    //
-    //     quote.accepted = true;
-    //
-    //     // Transfer tokens from seller to buyer
-    //     IERC20(quote.token).transferFrom(
-    //         quote.seller,
-    //         msg.sender,
-    //         quote.amount
-    //     );
-    //     // Transfer ETH from contract to seller
-    //     payable(quote.seller).transfer(msg.value);
-    // }
+    function acceptQuote(uint256 _quoteId) external {
+        // TODO: restrict to only whitelisted
+        Quote storage quote = quotes[_quoteId];
+        require(!quote.accepted, "Quote already accepted");
+
+        quote.accepted = true;
+        // MINT position
+        safeMint(msg.sender);
+    }
 }
