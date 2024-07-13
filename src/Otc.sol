@@ -15,13 +15,14 @@ type Price is uint256;
 contract Otc is Ownable, FlowOtc {
     string public greeting = "Hello World";
 
-    enum side {
+    enum QuoteSide {
         Buy,
         Sell
     }
 
     struct Quote {
         address token;
+        QuoteSide side;
         uint256 size;
         uint256 price; // TODO: figure out how to handle price (ex: in wei per token unit)
         bool accepted;
@@ -90,12 +91,20 @@ contract Otc is Ownable, FlowOtc {
     /// @param _size quote size
     /// @param _price quote price
     function postQuote(
+        //TODO: add side
         address _token,
+        QuoteSide _side,
         uint256 _size,
         uint256 _price
     ) external onlyOwner returns (uint256) {
         quotes.push(
-            Quote({token: _token, size: _size, price: _price, accepted: false})
+            Quote({
+                token: _token,
+                side: _side,
+                size: _size,
+                price: _price,
+                accepted: false
+            })
         );
         return quotes.length;
     }

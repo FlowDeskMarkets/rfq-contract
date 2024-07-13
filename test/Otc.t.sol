@@ -53,11 +53,13 @@ contract HelloWorld_test is Test {
         uint256 quoteSize = 42;
         uint256 quoteId = otcContract.postQuote(
             tokenAddr,
+            Otc.QuoteSide.Buy,
             quoteSize,
             quotePrice
         );
         (
             address token,
+            Otc.QuoteSide side,
             uint256 amount,
             uint256 price,
             bool accepted
@@ -65,6 +67,7 @@ contract HelloWorld_test is Test {
 
         assertEq(token, tokenAddr);
         assertEq(amount, 42);
+        assertEq(uint8(side), uint8(Otc.QuoteSide.Buy));
         assertEq(price, 1000);
         assertEq(accepted, false);
         assertEq(quoteId, 1);
@@ -77,7 +80,7 @@ contract HelloWorld_test is Test {
 
         vm.prank(addr2);
         vm.expectRevert();
-        otcContract.postQuote(tokenAddr, 100, 50);
+        otcContract.postQuote(tokenAddr, Otc.QuoteSide.Buy, 100, 50);
     }
 
     // ---------------------- listQuotes ----------------------
@@ -85,10 +88,11 @@ contract HelloWorld_test is Test {
         Otc otcContract = new Otc();
 
         address tokenAddr = address(0x123);
-        otcContract.postQuote(tokenAddr, 100, 50);
+        otcContract.postQuote(tokenAddr, Otc.QuoteSide.Sell, 100, 50);
         Otc.Quote[] memory quotes = otcContract.listQuotes();
 
         assertEq(quotes[0].token, tokenAddr);
+        assertEq(uint8(quotes[0].side), uint8(Otc.QuoteSide.Sell));
         assertEq(quotes[0].size, 100);
         assertEq(quotes[0].price, 50);
         assertEq(quotes[0].accepted, false);
