@@ -91,7 +91,7 @@ cast send \
 --private-key $PRIVATE_KEY \
 --rpc-url https://rpc.sepolia.org  \
 $CONTRACT_ADDRESS "whitelistAddress(address address, uint256 exposure)" \
-$CONTRACT_ADDRESS 10000
+$CLIENT_ADDRESS 10000
 
 ```
 
