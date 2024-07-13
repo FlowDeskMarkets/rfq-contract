@@ -85,11 +85,13 @@ $CONTRACT_ADDRESS "postQuote(address token, uint8 side, uint256 size, uint256 pr
 ### Whitelist address
 
 ```
+export CLIENT_ADDRESS="client_address"
+
 cast send \
 --private-key $PRIVATE_KEY \
 --rpc-url https://rpc.sepolia.org  \
 $CONTRACT_ADDRESS "whitelistAddress(address address, uint256 exposure)" \
-0xe3474c5Ccf3E882b442f2B46c43F1ae3c17F3887 10000
+$CONTRACT_ADDRESS 10000
 
 ```
 
