@@ -78,14 +78,14 @@ export CONTRACT_ADDRESS="private_key"
 cast send \
 --private-key $PRIVATE_KEY \
 --rpc-url https://rpc.sepolia.org  \
-$CONTRACT_ADDRESS "postQuote(address token, uint256 size, uint256 price)" \
-0xD0684a311F47AD7fdFf03951d7b91996Be9326E1 1 50000000
+$CONTRACT_ADDRESS "postQuote(address token, uint8 side, uint256 size, uint256 price)" \
+0xD0684a311F47AD7fdFf03951d7b91996Be9326E1 0 1 50000000
 ```
 
 ### List quotes
 
 ```
-cast send \
+cast call \
 --private-key $PRIVATE_KEY \
 --rpc-url https://rpc.sepolia.org  \
 $CONTRACT_ADDRESS "listQuotes()" \
