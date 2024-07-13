@@ -7,8 +7,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 import "./FlowOtc.sol";
 
-// TODO: add rbac / ownership
-
 type Exposure is uint256;
 type Price is uint256;
 
@@ -85,7 +83,6 @@ contract Otc is Ownable, FlowOtc {
     /// @param _size quote size
     /// @param _price quote price
     function postQuote(
-        //TODO: add side
         address _token,
         QuoteSide _side,
         uint256 _size,
@@ -111,7 +108,6 @@ contract Otc is Ownable, FlowOtc {
         returns (Quote[] memory)
     {
         // TODO: filter expired
-        // restrict to only whitelisted
         return quotes;
     }
 
