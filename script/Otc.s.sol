@@ -2,17 +2,17 @@
 pragma solidity ^0.8.13;
 
 import {Script, console} from "forge-std/Script.sol";
-import {HelloWorld} from "../src/HelloWorld.sol";
+import {Otc} from "../src/Otc.sol";
 
-contract HelloWorldScript is Script {
-    HelloWorld public helloWorld;
+contract OtcScript is Script {
+    Otc public otcContract;
 
     function setUp() public {}
 
     function run() public {
         vm.startBroadcast();
 
-        helloWorld = new HelloWorld();
+        otcContract = new Otc();
 
         vm.stopBroadcast();
     }
