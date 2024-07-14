@@ -20,7 +20,7 @@ contract Otc is Ownable, FlowOtc {
         address token;
         QuoteSide side;
         uint256 size;
-        uint256 price; // TODO: figure out how to handle price (ex: in wei per token unit)
+        uint256 price;
         bool accepted;
         // TODO: add expiration
     }
@@ -44,9 +44,6 @@ contract Otc is Ownable, FlowOtc {
     // TODO: add events
 
     constructor() Ownable(msg.sender) {}
-
-    // TODO:
-    // delete address from whitelisting
 
     /// Update or create exposure for a given address (whitelist address)
     /// @param _address address to whitelist

@@ -67,9 +67,13 @@ $ cast --help
 
 ## Test transactions
 
+`https://rpc.sepolia.org`
+`https://rpc-amoy.polygon.technology`
+
 ```
 export PRIVATE_KEY="private_key"
 export CONTRACT_ADDRESS="private_key"
+export RPC_URL="rpc_url"
 ```
 
 ### Create quote
@@ -77,7 +81,7 @@ export CONTRACT_ADDRESS="private_key"
 ```
 cast send \
 --private-key $PRIVATE_KEY \
---rpc-url https://rpc.sepolia.org  \
+--rpc-url $RPC_URL  \
 $CONTRACT_ADDRESS "postQuote(address token, uint8 side, uint256 size, uint256 price)" \
 0xD0684a311F47AD7fdFf03951d7b91996Be9326E1 0 1 50000000
 ```
@@ -89,7 +93,7 @@ export CLIENT_ADDRESS="client_address"
 
 cast send \
 --private-key $PRIVATE_KEY \
---rpc-url https://rpc.sepolia.org  \
+--rpc-url $RPC_URL  \
 $CONTRACT_ADDRESS "whitelistAddress(address address, uint256 exposure)" \
 $CLIENT_ADDRESS 10000
 
@@ -100,7 +104,7 @@ $CLIENT_ADDRESS 10000
 ```
 cast call \
 --private-key $PRIVATE_KEY \
---rpc-url https://rpc.sepolia.org  \
+--rpc-url $RPC_URL  \
 $CONTRACT_ADDRESS "listQuotes()" \
 ```
 
@@ -109,7 +113,7 @@ $CONTRACT_ADDRESS "listQuotes()" \
 ```
 cast send \
 --private-key $PRIVATE_KEY \
---rpc-url https://rpc.sepolia.org  \
+--rpc-url $RPC_URL  \
 $CONTRACT_ADDRESS "acceptQuote(uint256 quoteId)" \
 0
 ```
