@@ -1,17 +1,17 @@
-## Foundry
+## Flowdesk RFQ Defi
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+Defi RFQ smart contract for institutional firms, it gives the ability to do programmatic OTC trades.
 
-Foundry consists of:
+<img src="https://img.shields.io/badge/Solidity-e6e6e6?style=for-the-badge&logo=solidity&logoColor=black" />
 
--   **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
--   **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
--   **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
--   **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+## Features
 
-## Documentation
+- Whitelisting an Address: The contract owner can whitelist an address by setting its exposure.
+- Posting a Quote: The contract owner can post buy/sell quotes for supported ERC20 tokens.
+- Viewing Quotes: Whitelisted users with positive collateral can view available quotes.
+- Accepting a Quote: Whitelisted users with positive collateral can accept quotes, which will update their exposure and mint a corresponding position.
 
-https://book.getfoundry.sh/
+This contract ensures secure and efficient OTC trading while maintaining strict access control and collateral management.
 
 ## Usage
 
@@ -27,40 +27,61 @@ $ forge build
 $ forge test
 ```
 
-### Format
-
-```shell
-$ forge fmt
-```
-
-### Gas Snapshots
-
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
 ### Deploy
 
 ```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
+$ forge script script/Otc.s.sol --rpc-url $RPC_URL --private-key $PRIVATE_KEY --broadcast
 ```
 
-### Cast
+## Test transactions
 
-```shell
-$ cast <subcommand>
+`https://rpc.sepolia.org`
+`https://rpc-amoy.polygon.technology`
+
+```
+export PRIVATE_KEY="private_key"
+export CONTRACT_ADDRESS="private_key"
+export RPC_URL="rpc_url"
 ```
 
-### Help
+### Create quote
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
+```
+cast send \
+--private-key $PRIVATE_KEY \
+--rpc-url $RPC_URL  \
+$CONTRACT_ADDRESS "postQuote(address token, uint8 side, uint256 size, uint256 price)" \
+0xD0684a311F47AD7fdFf03951d7b91996Be9326E1 0 1 50000000
+```
+
+### Whitelist address
+
+```
+export CLIENT_ADDRESS="client_address"
+
+cast send \
+--private-key $PRIVATE_KEY \
+--rpc-url $RPC_URL  \
+$CONTRACT_ADDRESS "whitelistAddress(address address, uint256 exposure)" \
+$CLIENT_ADDRESS 10000
+
+```
+
+### List quotes
+
+```
+cast call \
+--private-key $PRIVATE_KEY \
+--rpc-url $RPC_URL  \
+$CONTRACT_ADDRESS "listQuotes()" \
+```
+
+### Accept quote
+
+```
+cast send \
+--private-key $PRIVATE_KEY \
+--rpc-url $RPC_URL  \
+$CONTRACT_ADDRESS "acceptQuote(uint256 quoteId)" \
+0
 ```
